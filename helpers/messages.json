@@ -1,0 +1,13 @@
+{
+    "messages" : {
+        "login" : {
+            "VALID_CREDENTIALS" : "Credenciales Correctas.",
+        }
+    },
+    "errors" : {
+        "login" : { 
+            "NO_PERMISSION" : "Este usuario no tiene los permisos.",
+            "INVALID_CREDENTIALS" : "Su usuario o Contraseña es incorrecto."
+        }
+    }
+}
