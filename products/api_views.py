@@ -92,7 +92,6 @@ class AreaTypeCreateAPIView( generics.CreateAPIView, SecuritySystem ) :
             data = { MESSAGE : "There was an error; error: {0}".format( str( e ) ) }
             return Response( self.encrypt_data( json.dumps( data ) ), status = status.HTTP_400_BAD_REQUEST )
             
-
 """
 Area type detail api view
 updates the object and retrieves its detail
@@ -116,7 +115,6 @@ class AreaTypeDetailAPIView( generics.RetrieveUpdateDestroyAPIView, SecuritySyst
             data = { MESSAGE : "There was an error; error: {0}".format( str( e ) ) }
             return Response( self.encrypt_data( json.dumps( data ) ), status = status.HTTP_400_BAD_REQUEST )
             
-    
     def update( self, request, *args, **kwargs ) :
         """ update object with id """
         try :
@@ -137,7 +135,6 @@ class AreaTypeDetailAPIView( generics.RetrieveUpdateDestroyAPIView, SecuritySyst
             data = { MESSAGE : "There was an error; error: {0}".format( str( e ) ) }
             return Response( self.encrypt_data( json.dumps( data ) ), status = status.HTTP_400_BAD_REQUEST )
 
-    
     def destroy( self, request, *args, **kwargs ) :
         """ delete object with id """
         try : 
@@ -148,8 +145,7 @@ class AreaTypeDetailAPIView( generics.RetrieveUpdateDestroyAPIView, SecuritySyst
         except Exception as e :
             data = { MESSAGE : "There was an error; error: {0}".format( str( e ) ) }
             return Response( self.encrypt_data( json.dumps( data ) ), status = status.HTTP_400_BAD_REQUEST )
-            
-
+        
 """
 Cabin type list api view
 returns all the area types if you are both admins.all
@@ -172,7 +168,6 @@ class CabinTypeListAPIView( generics.ListAPIView, SecuritySystem ) :
         response_list = self.encrypt_long_data( json.dumps( data ) )
         return Response( response_list, status = status.HTTP_200_OK )
         
-
 """
 Cabin type create api view
 creates an object then retrieves it
@@ -235,7 +230,6 @@ class CabinTypeDetailAPIView( generics.RetrieveUpdateDestroyAPIView, SecuritySys
             data = { MESSAGE : "There was an error; error: {0}".format( str( e ) ) }
             return Response( self.encrypt_data( json.dumps( data ) ), status = status.HTTP_400_BAD_REQUEST )
             
-    
     def update( self, request, *args, **kwargs ) :
         """ update object with id """
         try :
@@ -258,7 +252,6 @@ class CabinTypeDetailAPIView( generics.RetrieveUpdateDestroyAPIView, SecuritySys
             data = { MESSAGE : "There was an error; error: {0}".format( str( e ) ) }
             return Response( self.encrypt_data( json.dumps( data ) ), status = status.HTTP_400_BAD_REQUEST )
 
-    
     def destroy( self, request, *args, **kwargs ) :
         """ delete object with id """
         try : 
@@ -353,7 +346,6 @@ class PoolDetailAPIView( generics.RetrieveUpdateDestroyAPIView, SecuritySystem )
             data = { MESSAGE : "There was an error; error: {0}".format( str( e ) ) }
             return Response( self.encrypt_data( json.dumps( data ) ), status = status.HTTP_400_BAD_REQUEST )
             
-    
     def update( self, request, *args, **kwargs ) :
         """ update object with id """
         try :
@@ -375,7 +367,6 @@ class PoolDetailAPIView( generics.RetrieveUpdateDestroyAPIView, SecuritySystem )
             data = { MESSAGE : "There was an error; error: {0}".format( str( e ) ) }
             return Response( self.encrypt_data( json.dumps( data ) ), status = status.HTTP_400_BAD_REQUEST )
 
-    
     def destroy( self, request, *args, **kwargs ) :
         """ delete object with id """
         try : 
@@ -470,7 +461,6 @@ class CabinDetailAPIView( generics.RetrieveUpdateDestroyAPIView, SecuritySystem 
             data = { MESSAGE : "There was an error; error: {0}".format( str( e ) ) }
             return Response( self.encrypt_long_data( json.dumps( data ) ), status = status.HTTP_400_BAD_REQUEST )
             
-    
     def update( self, request, *args, **kwargs ) :
         """ update object with id """
         try :
@@ -492,7 +482,6 @@ class CabinDetailAPIView( generics.RetrieveUpdateDestroyAPIView, SecuritySystem 
             data = { MESSAGE : "There was an error; error: {0}".format( str( e ) ) }
             return Response( self.encrypt_long_data( json.dumps( data ) ), status = status.HTTP_400_BAD_REQUEST )
 
-    
     def destroy( self, request, *args, **kwargs ) :
         """ delete object with id """
         try : 
@@ -635,14 +624,16 @@ class AreaDetailAPIView( generics.RetrieveUpdateDestroyAPIView, SecuritySystem )
 Image to Cabin
 Image to set cabins image
 """
-class ImageToCabin( APIView, SecuritySystem ) :
+class ImageToCabin( APIView ) :
     
-    authentication_classes = ( BasicAuthentication, )
-    permission_classes = ( IsAuthenticated, IsAdmin, )
-    queryset = Cabin.objects.all()
-    serializer_class = CabinSerializer
+    def get_object( self, pk ) :
+        """Get object function """
+        try :
+            return Cabin.objects.get( pk=pk )
+        except Cabin.DoesNotExist :
+            raise Http404
     
-    def put( self, request, format=None ) :
+    def put( self, request, pk, format=None ) :
         """
         put function
         will get the cabin by id and then is going to add the 
@@ -650,15 +641,15 @@ class ImageToCabin( APIView, SecuritySystem ) :
         cabin model
         """
         try :
-            the_data = json.dumps( self.decrypt_long_data( request.body ), ensure_ascii=False )
-            json_formated = json.loads( the_data )
-            json_decoded = json.loads( json_formated )
-            print( the_data )
-            instance = self.get_object()
-            print( instance )
-            serialized = self.get_serializer( instance, many = None )
+            fh = open( "imageToSave.png", "wb" )
+            fh.write( request.data.decode( "base64" ) )
+            fh.close()
+            instance = self.get_object( pk )
+            instance.img_url = save_image( "imageToSave.png" )
+            instance.save()
+            serialized = CabinSerializer( instance, many = None )
             data = { DATA : serialized.data }
-            return Response( self.encrypt_long_data( json.dumps( data ) ), status = status.HTTP_200_OK )
+            return Response( data, status = status.HTTP_200_OK )
         except Exception as e :
             data = { MESSAGE : "There was an error; error: {0}".format( str( e ) ) }
-            return Response( self.encrypt_data( json.dumps( data ) ), status = status.HTTP_400_BAD_REQUEST )
+            return Response( data, status = status.HTTP_400_BAD_REQUEST )

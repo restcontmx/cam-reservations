@@ -96,3 +96,63 @@ class MyTasksListAPIView( generics.ListAPIView, SecuritySystem ) :
         except Exception as e :
             data = { MESSAGE : "There was an error; error:{0}".format( str( e ) ) }
             return Response( self.encrypt_long_data( json.dumps( data ) ), status = status.HTTP_400_BAD_REQUEST )
+
+"""
+This will return the tasks created by user not done by due time
+"""
+class ListNotDoneTasksAPIView( generics.ListAPIView, SecuritySystem ) :
+    
+    authentication_classes = ( BasicAuthentication, )
+    permission_classes = ( IsAuthenticated, IsSystemWorthy, )
+    serializer_class = TaskSerializer
+    queryset = Task.objects.all()
+    
+    def list( self, request, *args, **kwargs ) :
+        """ This will return a list of objects """
+        try :
+            tasks = Task().get_tasks_not_done_by_duedate( request.user )
+            serialized = self.get_serializer( tasks, many=True )
+            data = { DATA : serialized.data }
+            return Response( self.encrypt_long_data( json.dumps( data ) ), status = status.HTTP_200_OK )
+        except Exception as e :
+            data = { MESSAGE : "There was an error; error {0}".format( str( e ) ) }
+            return Response( self.encrypt_long_data( json.dumps( data ) ), status = status.HTTP_400_BAD_REQUEST )
+            
+class TaskRetrieveUpdateDestroyAPIView( generics.RetrieveUpdateDestroyAPIView, SecuritySystem ) :
+    
+    authentication_classes = ( BasicAuthentication, )
+    permission_classes = ( IsAuthenticated, IsSystemWorthy, )
+    serializer_class = TaskSerializer
+    queryset = Task.objects.all()
+    
+    def update( self, request, *args, **kwargs ) :
+        """ update model with pk """
+        try :
+            the_data = json.dumps( self.decrypt_long_data( request.body ), ensure_ascii=False )
+            json_formated = json.loads( the_data )
+            json_decoded = json.loads( json_formated )
+            
+            instance = self.get_object()
+            instance.name = json_decoded[ 'name' ]
+            instance.description = json_decoded[ 'description' ]
+            instance.value = int( json_decoded[ 'value' ] )
+            instance.state = int( json_decoded[ 'state' ] )
+            
+            instance.save()
+            
+            data = { DATA : self.get_serializer( instance, many = False ).data }            
+            return Response( self.encrypt_long_data( json.dumps( data ) ), status = status.HTTP_200_OK )
+        except Exception as e :
+            data = { MESSAGE : ( "There was an error; Error: {0}" ).format( str( e ) ) }
+            return Response( self.encrypt_long_data( json.dumps( data ) ), status = status.HTTP_400_BAD_REQUEST )
+    
+    def destroy( self, request, *args, **kwargs ) :
+        """ delete object with id """
+        try : 
+            instance = self.get_object()
+            instance.delete()
+            data = { MESSAGE : "Objecto borrado." }
+            return Response( self.encrypt_data( json.dumps( data ) ), status = status.HTTP_204_NO_CONTENT )
+        except Exception as e :
+            data = { MESSAGE : "There was an error; error: {0}".format( str( e ) ) }
+            return Response( self.encrypt_data( json.dumps( data ) ), status = status.HTTP_400_BAD_REQUEST )

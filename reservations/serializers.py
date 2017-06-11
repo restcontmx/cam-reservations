@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
-from .models import Detail, DetailCabin, DetailArea, DetailPool, ReservationType, ReservationInfo, Reservation, PaymentStatus, Promotion, Payment
-from products.serializers import CabinSerializer, AreaSerializer, PoolSerializer
+from .models import *
+from products.serializers import *
 from custom_auth.serializers import UserCatSerializer
 
 class DetailSerializer( serializers.ModelSerializer ) :
@@ -10,12 +10,10 @@ class DetailSerializer( serializers.ModelSerializer ) :
         fields = ( 'id', 'user', 'qty', )
         
 class DetailCabinSerializer( serializers.ModelSerializer ) :
-    
     product = CabinSerializer( many = False )
-    
     class Meta :
         model = DetailCabin
-        fields = ( 'id', 'product', )
+        fields = '__all__'
 
 class DetailPoolSerializer( serializers.ModelSerializer ) :
     
@@ -48,11 +46,10 @@ class ReservationSerializer( serializers.ModelSerializer ) :
     user = UserCatSerializer( many = False )
     reservation_type = ReservationTypeSerializer( many = False )
     reservation_info = ReservationInfoSerializer( many = False )
-    details = DetailSerializer( many = True )
-    
+    details = DetailCabinSerializer( many = True )
     class Meta :
         model = Reservation
-        fields = ( 'id', 'user', 'user_client', 'reservation_info', 'reservation_type', 'details', 'timestamp', 'updated', )
+        fields = ( 'id', 'user', 'user_client', 'reservation_info', 'reservation_type', 'date_start', 'date_end', 'details', 'timestamp', 'updated', )
 
 class PaymentStatusSerializer( serializers.ModelSerializer ) :
     
@@ -60,6 +57,26 @@ class PaymentStatusSerializer( serializers.ModelSerializer ) :
         model = PaymentStatus
         fields = ( 'id', 'name', 'description', 'value', 'timestamp', 'updated', )
         
+class PaymentSerializer( serializers.ModelSerializer ) :
+    
+    payment_status = PaymentStatusSerializer( many = False )
+    
+    class Meta :
+        model = Payment
+        fields = ( 'id', 'preference_mp_id', 'preference_mp_init_point', 'collection_id', 'payment_status', 'timestamp', 'updated', )
+        
+class ReservationCabinSerializer( serializers.ModelSerializer ) :
+    
+    user = UserCatSerializer( many = False )
+    reservation_info = ReservationInfoSerializer( many = False )
+    details = DetailCabinSerializer( many = True )
+    payment_status = PaymentStatusSerializer( many = False )
+    payment_info = PaymentSerializer( many = False )
+    
+    class Meta :
+        model = ReservationCabin
+        fields = ( 'id', 'extended_token', 'user', 'user_client', 'payment_status', 'payment_info', 'reservation_info', 'total', 'date_start', 'max_guests', 'extra_guests_child', 'extra_guests_adult', 'date_end', 'details', 'timestamp', 'updated', )
+
 class PromotionSerializer( serializers.ModelSerializer ) :
     
     user = UserCatSerializer( many = False )
@@ -67,14 +84,3 @@ class PromotionSerializer( serializers.ModelSerializer ) :
     class Meta :
         model = Promotion
         fields = ( 'id', 'name', 'description', 'discount', 'user', 'date_start', 'date_end', 'timestamp', 'updated', )
-        
-class PaymentSerializer( serializers.ModelSerializer ) :
-    
-    reservation = ReservationSerializer( many = False )
-    payment_status = PaymentStatusSerializer( many = False )
-    promotion = PromotionSerializer( many = False )
-    
-    class Meta :
-        model = Payment
-        fields = ( 'id', 'reservation', 'promotion', 'payment_status', 'total', 'timestamp', 'updated', )
-        

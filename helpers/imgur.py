@@ -16,5 +16,5 @@ def save_image( file ) :
     returns the link
     """
     json_shit = client.upload_from_path( file, config=None, anon=True )
-    os.remove()
+    os.remove( file )
     return json_shit['link']

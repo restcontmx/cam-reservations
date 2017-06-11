@@ -12,6 +12,10 @@ from custom_auth.api_views import *
 from products.api_views import *
 from admin_ext.api_views import *
 from reservations.api_views import *
+from website.api_views import *
+from general.api_views import *
+from balpresresclient.api_views import *
+from reports.api_views import *
 
 # Url patterns
 urlpatterns = patterns(
@@ -50,7 +54,9 @@ urlpatterns = patterns(
     
     # tasks routes
     url( r'^task/$', TaskListCreateAPIView.as_view(), name='task.listcreate' ),
+    url( r'^task/(?P<pk>[0-9]+)$', TaskRetrieveUpdateDestroyAPIView.as_view(), name='task.detail' ),
     url( r'^task/assigned/$', MyTasksListAPIView.as_view(), name="task.assigned" ),
+    url( r'^task/notdonebydue/$', ListNotDoneTasksAPIView.as_view(), name="task.notdonebydue" ),
     
     # reservation type routes
     url( r'^reservationtype/$', ReservationTypeListAPIView.as_view(), name="reservationtype.list" ),
@@ -63,8 +69,12 @@ urlpatterns = patterns(
     
     # reservation routes
     url( r'^reservation/$', ReservationListAdminAPIView.as_view(), name="reservation.listadmin" ),
-    url( r'^reservation/new/$', ReservationListCreateAPIView.as_view(), name="reservation.listcreate" ),
-    url( r'^reservation/detail/(?P<pk>[0-9]+)$', ReservationRetrieveUpdateDestroyAPIView.as_view(), name="reservation.detail" ),
+    url( r'^reservation/cabin/new/$', ReservationCabinListCreateAPIView.as_view(), name="reservationcabin.listcreate" ),
+    url( r'^reservation/cabins/$', ProductCabinListFromDatesAPIView.as_view(), name="reservation.cabins" ),
+    url( r'^reservation/cabin/detail/(?P<pk>[0-9]+)$', ReservationCabinRetrieveUpdateDestroyAPIView.as_view(), name="reservation.cabins.detail" ),
+    url( r'^reservation/cabin/paymentstatus/(?P<pk>[0-9]+)$', ReservationCabinUpdatePaymentStatusAPIView.as_view(), name="reservation.cabins.paymentstatus" ),
+    
+    url( r'^notifications$', NotificationsAPIView.as_view(), name="notifications" ),
 
     # Payment status routes
     url( r'^paymentstatus/$', PaymentStatusListAPIView.as_view(), name="paymentstatus.list" ),
@@ -76,6 +86,49 @@ urlpatterns = patterns(
     url( r'^promotion/new/$', PromotionCreateAPIView.as_view(), name="promotion.create" ),
     url( r'^promotion/detail/(?P<pk>[0-9]+)$', PromotionRetrieveUpdateDestroyAPIView.as_view(), name="promotion.detail" ),
 
-    # payment routes
-
+    # general routes
+    url( r'^settings/alertnumbers/$', AlertNumbersSettingsListAPIView.as_view(), name="general.alertnumbers.list" ),
+    url( r'^settings/alertemails/$', AlertEmailsSettingsListAPIView.as_view(), name="general.alertemails.list" ),
+    url( r'^settings/contactemail/$', ContactEmailSettingsListAPIView.as_view(), name="general.contactemail.list" ),
+    url( r'^settings/ticketprices/$', TicketPricesSettingsListAPIView.as_view(), name="general.ticketprices.list" ),
+    url( r'^settings/signatures/$', SignaturesSettingsListAPIView.as_view(), name="general.signatures.list" ),
+    
+    url( r'^settings/alertnumbers/edit/$', AlertNumbersSettingsUpdateAPIView.as_view(), name="general.alertnumbers.edit" ),
+    url( r'^settings/alertemails/edit/$', AlertEmailsSettingsUpdateAPIView.as_view(), name="general.alertemails.edit" ),
+    url( r'^settings/contactemail/edit/$', ContactEmailSettingsUpdateAPIView.as_view(), name="general.contactemail.edit" ),
+    url( r'^settings/ticketprices/edit/$', TicketPricesSettingsUpdateAPIView.as_view(), name="general.ticketprices.edit" ),
+    
+    # website contents 
+    url( r'^website/ourcompanycontent/$', OurCompanyContentListAPIView.as_view(), name="website.ourcompanycontent.list" ),
+    url( r'^website/ourservicescontent/$', OurServicesContentListAPIView.as_view(), name="website.ourservicescontent.list" ),
+    url( r'^website/recomendations/$', RecomendationsListAPIView.as_view(), name="website.recomendations.list" ),
+    url( r'^website/ourpersonalcontent/$', OurPersonalContentListAPIView.as_view(), name="website.ourpersonalcontent.list" ),
+    url( r'^website/ourproductscontent/$', OurProductsContentListAPIView.as_view(), name="website.ourproductscontent.list" ),
+    
+    url( r'^website/ourcompanycontent/edit/$', OurCompanyContentUpdateAPIView.as_view(), name="website.ourcompanycontent.edit" ),
+    url( r'^website/ourservicescontent/edit/$', OurServicesContentUpdateAPIView.as_view(), name="website.ourservicescontent.edit" ),
+    url( r'^website/recomendations/edit/$', RecomendationsUpdateAPIView.as_view(), name="website.recomendations.edit" ),
+    url( r'^website/ourpersonalcontent/edit/$', OurPersonalContentUpdateAPIView.as_view(), name="website.ourpersonalcontent.edit" ),
+    url( r'^website/ourproductscontent/edit/$', OurProductsContentUpdateAPIView.as_view(), name="website.ourproductscontent.edit" ),
+    url( r'^website/contactform/$', ContactFormCreateAPIView.as_view(), name="website.contactform.create" ),
+    
+    url( r'^website/ourcompanycontent/image1/(?P<pk>[0-9]+)$', Image1ToOurCompanyContent.as_view(), name="website.ourcompanycontent.image1" ),
+    url( r'^website/ourcompanycontent/image2/(?P<pk>[0-9]+)$', Image2ToOurCompanyContent.as_view(), name="website.ourcompanycontent.image2" ),
+    url( r'^website/ourpersonalcontent/image/(?P<pk>[0-9]+)$', ImageToOurPersonalContent.as_view(), name="website.ourpersonalcontent.image" ),
+    
+    url( r'^balpresresclient/reservationcabin/(?P<pk>[\w{}.-]{1,40})$', ReservationCabinByToken.as_view(), name="balpresresclient.reservationcabin.detail" ),
+    
+    #reports
+    url( r'^reports/bymonth/$', ReportsByMonthList.as_view(), name="reports.bymonth" ),
+    url( r'^reports/byyear/$', ReportsByYearList.as_view(), name="reports.byyear" ),
+    url( r'^reports/bydates/$', ReportsByDatesList.as_view(), name="reports.bydates" ),
+    url( r'^reports/payedbymonth/$', PayedReportsByMonthList.as_view(), name="reports.payedbymonth" ),
+    url( r'^reports/pendingbymonth/$', PendingReportsByMonthList.as_view(), name="reports.pendingbymonth" ),
+    url( r'^reports/payedbydates/$', PayedReportsByDatesList.as_view(), name="reports.payedbydates" ),
+    url( r'^reports/pendingbydates/$', PendingReportsByDatesList.as_view(), name="reports.pendingbydates" ),
+    url( r'^reports/payedbyyear/$', PayedReportsByYearList.as_view(), name="reports.payedbyyear" ),
+    
+    url( r'^reports/cabinsbymonth/$', CabinReportsByMonthList.as_view(), name="reports.cabinsbymonth" ),
+    url( r'^reports/cabinsbyyear/$', CabinReportsByYearList.as_view(), name="reports.cabinsbyyear" ),
+    
 )

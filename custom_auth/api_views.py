@@ -52,7 +52,7 @@ class LoginAdminPanelAPIView( APIView, SecuritySystem ) :
             user_system = CustomSystemUser.objects.get( user = user_from_db.id )
             data[ MESSAGE ] = VALID_CREDENTIALS if user_system.name.value < APP_ROL else NO_PERMISSION
             stat = status.HTTP_200_OK if user_system.name.value < APP_ROL else status.HTTP_401_UNAUTHORIZED
-            data[ DATA ] = { "name" : user_system.name.name, "value" : user_system.name.value }
+            data[ DATA ] = { "full_name" : ("{0} {1}").format( user_from_db.first_name, user_from_db.last_name ), "rol" : { "name" : user_system.name.name, "value" : user_system.name.value } }
             return Response( self.encrypt_data( json.dumps( data ) ), status=stat )
         
         else :
@@ -66,7 +66,7 @@ Get users according of their permission
 class UserListAPIView( generics.ListAPIView, SecuritySystem ) :
     
     authentication_classes = ( BasicAuthentication, )
-    permission_classes = (  IsAuthenticated, IsAdmin, )
+    permission_classes = (  IsAuthenticated, IsSystemWorthy, )
     serializer_class = CustomSystemUserSerializer
     
     def list( self, request, format = None ) :
@@ -74,9 +74,10 @@ class UserListAPIView( generics.ListAPIView, SecuritySystem ) :
         list all the users according of the permission
         """
         try : 
-            instance = CustomSystemUser.objects.exclude( name = 5 ).exclude( name = 4 )
+            d_user = CustomSystemUser.objects.get( user = request.user.id )
+            instance = CustomSystemUser.objects.filter( name__gte = d_user.name.value ).exclude( name = 5 ).exclude( name = 4 )
             serializer = self.get_serializer( instance, many = True )
-            data = { DATA : serializer.data } 
+            data = { DATA : serializer.data }
             return Response( self.encrypt_long_data( json.dumps( data ) ), status = status.HTTP_200_OK )
         except Exception as e :
             data = { MESSAGE : "There was an error; error {0}.".format( str( e ) ) }

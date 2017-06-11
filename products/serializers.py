@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from .models import AreaType, Area, CabinType, Cabin, Pool
-
+from .models import *
 
 class AreaTypeSerializer( serializers.ModelSerializer ) :
     class Meta :

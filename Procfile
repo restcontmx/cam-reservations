@@ -1,0 +1,1 @@
+web: gunicorn balpres_be.wsgi.application --log-file -

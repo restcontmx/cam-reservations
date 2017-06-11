@@ -46,7 +46,11 @@ INSTALLED_APPS = [
     'dummy',
     'products',
     'reservations',
-    'admin_ext'
+    'admin_ext',
+    'website',
+    'general',
+    'balpresresclient',
+    'reports'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -63,21 +67,32 @@ MIDDLEWARE_CLASSES = [
 
 ROOT_URLCONF = 'balpres_be.urls'
 
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
+PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+
+TEMPLATE_DIRS = (
+    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(PROJECT_ROOT, 'templates').replace('\\','/'),
+)
+
+# List of callables that know how to import templates from various sources.
+TEMPLATE_LOADERS = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+)
+# Template context processors
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
+    'django.core.context_processors.request',
+    'django.contrib.messages.context_processors.messages'
+)
 
 WSGI_APPLICATION = 'balpres_be.wsgi.application'
 
@@ -143,6 +158,11 @@ CORS_ORIGIN_WHITELIST = (
     'localhost:3001',
     'http://localhost:3001',
     'https://guarded-eyrie-92119.herokuapp.com',
+    'http://reservaciones.balneariolaspalmas.co',
+    'http://admin.balneariolaspalmas.co',
+    'http://balneariolaspalmas.co',
+    'admin.balneariolaspalmas.co',
+    'reservaciones.balneariolaspalmas.co',
     'guarded-eyrie-92119.herokuapp.com',
     'admin.actime.mx'
 )

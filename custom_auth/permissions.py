@@ -42,7 +42,7 @@ class IsAdmin( permissions.BasePermission ) :
         """
         the_user = CustomSystemUser.objects.get( user = request.user.id )
         return the_user.name.value < 3
-        
+
 """
 Is application
 the permission for the applications
