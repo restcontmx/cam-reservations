@@ -101,6 +101,7 @@ WSGI_APPLICATION = 'balpres_be.wsgi.application'
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
 DATABASES = {
+    """
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'db_balpres',
@@ -108,6 +109,16 @@ DATABASES = {
         'PASSWORD': '$Ld5z6GK?JQ4+N7G',
         'HOST': 'localhost',
         'PORT': '', 
+    }
+    """
+    
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'd7bk5rr6j483ve',
+        'USER': 'dqpfszwemkqmoq',
+        'PASSWORD': 'ed431de7146a9ccc1f239dc0240fcfb97e7eb351af2111c3b77770afb05ed999',
+        'HOST': 'ec2-54-83-205-71.compute-1.amazonaws.com',
+        'PORT': '5432', 
     }
 }
 
