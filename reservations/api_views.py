@@ -629,7 +629,7 @@ class NotificationsAPIView( generics.CreateAPIView ) :
     
     def create( self, request, *args, **kwargs ) :
         """ create function; creates an object duuuh """
-        mp = mercadopago.MP("8488464930292392", "m9i6dgrloSms9s0OHhp4XI7GHREukYOC")
+        mp = mercadopago.MP("2620041704606675", "ek7dhDMzyAx3N2VXoZCQ4awuPi3F12CA")
         
         payment_id = request.query_params['id']
         payment_info = mp.get_payment_info( payment_id )
