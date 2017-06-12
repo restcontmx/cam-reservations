@@ -644,8 +644,8 @@ class NotificationsAPIView( generics.CreateAPIView ) :
                     else :
                         reservation.payment_info.payment_status = PaymentStatus.objects.get( value = 1 )
                     reservation.payment_info.save()
-                data = { MESSAGE : "OK" }
-                return Response( json.dumps( data ), status = status.HTTP_200_OK )
+            data = { MESSAGE : "OK" }
+            return Response( json.dumps( data ), status = status.HTTP_200_OK )
         except Exception as e :
             print( e )
             data = { MESSAGE : "OK" }
