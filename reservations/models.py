@@ -105,7 +105,7 @@ class Payment( models.Model ) :
     """
     preference_mp_id = models.CharField( max_length=100, blank=True, null=True, default="" )
     preference_mp_init_point = models.CharField( max_length=256, blank=True, null=True, default="" )
-    payment_status = models.ForeignKey( PaymentStatus, default=3, null=True )
+    payment_status = models.ForeignKey( PaymentStatus, default=1, null=True )
     collection_id = models.BigIntegerField( default=0, null=True, blank=True )
     
     timestamp = models.DateTimeField( auto_now_add = True, auto_now = False )
@@ -132,7 +132,7 @@ class ReservationCabin( models.Model ) :
     date_start = models.DateTimeField( blank = True, null = True )
     date_end = models.DateTimeField( blank = True, null = True )
     
-    payment_status = models.ForeignKey( PaymentStatus, default=3, null=True )
+    payment_status = models.ForeignKey( PaymentStatus, default=1, null=True )
     payment_info = models.ForeignKey( Payment, null=True, blank=True )
     
     timestamp = models.DateTimeField( auto_now_add = True, auto_now = False )
