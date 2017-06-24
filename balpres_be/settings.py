@@ -167,12 +167,12 @@ CORS_ORIGIN_WHITELIST = (
     'https://guarded-eyrie-92119.herokuapp.com',
     'http://reservaciones.balneariolaspalmas.co',
     'http://admin.balneariolaspalmas.co',
-    'https://balpres-website-dev.herokuapp.com/',
+    'https://balpres-website-dev.herokuapp.com',
     'http://balneariolaspalmas.co',
     'admin.balneariolaspalmas.co',
     'reservaciones.balneariolaspalmas.co',
     'guarded-eyrie-92119.herokuapp.com',
-    'balpres-website-dev.herokuapp.com/',
+    'balpres-website-dev.herokuapp.com',
     'admin.actime.mx'
 )
    
