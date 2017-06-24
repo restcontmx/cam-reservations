@@ -161,14 +161,18 @@ CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
     'localhost',
     'localhost:3001',
+    'localhost:3002',
     'http://localhost:3001',
+    'http://localhost:3002',
     'https://guarded-eyrie-92119.herokuapp.com',
     'http://reservaciones.balneariolaspalmas.co',
     'http://admin.balneariolaspalmas.co',
+    'https://balpres-website-dev.herokuapp.com/',
     'http://balneariolaspalmas.co',
     'admin.balneariolaspalmas.co',
     'reservaciones.balneariolaspalmas.co',
     'guarded-eyrie-92119.herokuapp.com',
+    'balpres-website-dev.herokuapp.com/',
     'admin.actime.mx'
 )
    
