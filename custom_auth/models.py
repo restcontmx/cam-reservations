@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+# Create your models here.
+
 """
 Rol Model
 This is for every kind of user authentication on the system
@@ -13,7 +15,7 @@ There are deined as the next:
 """
 class Rol( models.Model ) : 
     
-    name = models.CharField( max_length = 100, default="", blank=False, unique=True  )
+    name = models.CharField( max_length = 100, default="", blank=False, unique=True )
     description = models.CharField( max_length = 200, default="", blank=True )
     value = models.IntegerField( default=1, blank=False )
     

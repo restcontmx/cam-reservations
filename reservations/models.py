@@ -116,7 +116,7 @@ class Payment( models.Model ) :
     
 class ReservationCabin( models.Model ) :
     """
-    Reservation Cabin
+    Reservation Cabin 
     This is a reservation for the cabin details
     """
     user = models.ForeignKey( User, related_name="user_creator_rescab" )

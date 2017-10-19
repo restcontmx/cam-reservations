@@ -466,8 +466,6 @@ class ReservationCabinListCreateAPIView( generics.ListCreateAPIView, SecuritySys
 
             reservation_info_json = json_decoded['reservationinfo']
             
-            print( json_decoded )
-            
             reservation_info = ReservationInfo(
                 user = request.user,
                 full_name = reservation_info_json['full_name'],
@@ -502,8 +500,8 @@ class ReservationCabinListCreateAPIView( generics.ListCreateAPIView, SecuritySys
                 detail.save()
                 instance.details.add( detail )
             
-            reservation_cabin_to_alert( instance )
-            reservation_cabin_to_alerts( instance )
+            # reservation_cabin_to_alert( instance )
+            # reservation_cabin_to_alerts( instance )
             
             serialized = self.get_serializer( instance, many = False )
             data = { DATA : serialized.data }
