@@ -71,6 +71,7 @@ urlpatterns = patterns(
     url( r'^reservation/$', ReservationListAdminAPIView.as_view(), name="reservation.listadmin" ),
     url( r'^reservation/cabin/new/$', ReservationCabinListCreateAPIView.as_view(), name="reservationcabin.listcreate" ),
     url( r'^reservation/cabins/$', ProductCabinListFromDatesAPIView.as_view(), name="reservation.cabins" ),
+    url( r'^reservation/cabin/detail/(?P<pk>[0-9]+)$', ReservationCabinRetrieveUpdateDestroyAPIView.as_view(), name="reservation.cabins.detail" ),
     url( r'^reservation/cabin/paymentstatus/(?P<pk>[0-9]+)$', ReservationCabinUpdatePaymentStatusAPIView.as_view(), name="reservation.cabins.paymentstatus" ),
     
     url( r'^notifications$', NotificationsAPIView.as_view(), name="notifications" ),
