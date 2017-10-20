@@ -103,10 +103,10 @@ WSGI_APPLICATION = 'balpres_be.wsgi.application'
 DATABASES = {
    'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd7bk5rr6j483ve',
-        'USER': 'dqpfszwemkqmoq',
-        'PASSWORD': 'ed431de7146a9ccc1f239dc0240fcfb97e7eb351af2111c3b77770afb05ed999',
-        'HOST': 'ec2-54-83-205-71.compute-1.amazonaws.com',
+        'NAME': 'de69d1tj7tigtt',
+        'USER': 'jqvexvdyutkefg',
+        'PASSWORD': 'cf7e0aafffa8835f267f0eb015a4b5707513258382e67a25e3c2a3c3ff3cd141',
+        'HOST': 'ec2-174-129-193-169.compute-1.amazonaws.com',
         'PORT': '5432', 
     }
 }
@@ -161,19 +161,7 @@ CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
     'localhost',
     'localhost:3001',
-    'localhost:3002',
-    'http://localhost:3001',
-    'http://localhost:3002',
-    'https://guarded-eyrie-92119.herokuapp.com',
-    'http://reservaciones.balneariolaspalmas.co',
-    'http://admin.balneariolaspalmas.co',
-    'https://balpres-website-dev.herokuapp.com',
-    'http://balneariolaspalmas.co',
-    'admin.balneariolaspalmas.co',
-    'reservaciones.balneariolaspalmas.co',
-    'guarded-eyrie-92119.herokuapp.com',
-    'balpres-website-dev.herokuapp.com',
-    'admin.actime.mx'
+    'localhost:3002'
 )
    
 CORS_ORIGIN_REGEX_WHITELIST = ()
