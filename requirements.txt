@@ -3,7 +3,7 @@ Markdown==2.6.7
 Pillow==2.3.0
 SecretStorage==2.0.0
 argparse==1.2.1
-certifi==2017.4.17
+certifi==2022.12.7
 chardet==3.0.3
 colorama==0.2.5
 configobj==4.7.2
